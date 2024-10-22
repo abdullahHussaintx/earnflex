@@ -5,6 +5,10 @@ import { fetchActivationCode } from "../redux/activationCodeSlice";
 import { fetchUsersData } from "../redux/task1Slice";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 export const Task2 = () => {
   const dispatch = useDispatch();
@@ -17,6 +21,13 @@ export const Task2 = () => {
     } else {
       dispatch(fetchUsersData());
     }
+    //IDK the markes were showing correctly in dev mode but in production the instead of markes broken images were shown by googling it i found out this
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: markerIconRetina,
+      iconUrl: markerIcon,
+      shadowUrl: markerShadow,
+    });
   }, [dispatch, activationCode]);
 
   if (loading) {
@@ -31,8 +42,8 @@ export const Task2 = () => {
   }
 
   return (
-    <section className=" space-y-3">
-      <p className=" font-semibold text-center">
+    <section className="space-y-3">
+      <p className="font-semibold text-center">
         All Employees Locations on map
       </p>
       <MapContainer
